@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt.js";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import User from "../models/user.js";
@@ -28,7 +28,6 @@ export const signin = async (req, res) => {
       "test",
       { expiresIn: "1h" }
     );
-
     res.status(200).json({ result: existingUser, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong." });
@@ -36,7 +35,7 @@ export const signin = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
-  const { email, password, confirmPassword, firstName, lasName } = req.body;
+  const { email, password, confirmPassword, firstName, lastName } = req.body;
 
   try {
     // make sure there isn't an indentical user
@@ -59,9 +58,10 @@ export const signup = async (req, res) => {
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
       expiresIn: "1h",
     });
-
-    res.status(200).json({ result: result, token });
+    res.status(201).json({ result: result, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong." });
+
+    console.log(error);
   }
 };
